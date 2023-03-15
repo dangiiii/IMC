@@ -1,10 +1,10 @@
 for port in $(seq 1 6); \
 do \
 # rm ./redis${port}/data/appendonlydir/*
-# mkdir ./redis${port}
-# mkdir ./redis${port}/data
-rm -R ./redis/redis${port}/data
+mkdir ./redis/
+mkdir ./redis/redis${port}
 mkdir ./redis/redis${port}/data
+
 
 touch ./redis/redis${port}/redis.conf
 cat << EOF > ./redis/redis${port}/redis.conf
