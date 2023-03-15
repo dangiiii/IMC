@@ -3,11 +3,11 @@ do \
 # rm ./redis${port}/data/appendonlydir/*
 # mkdir ./redis${port}
 # mkdir ./redis${port}/data
-rm -R ./redis${port}/data
-mkdir ./redis${port}/data
+rm -R ./redis/redis${port}/data
+mkdir ./redis/redis${port}/data
 
-touch ./redis${port}/redis.conf
-cat << EOF > ./redis${port}/redis.conf
+touch ./redis/redis${port}/redis.conf
+cat << EOF > ./redis/redis${port}/redis.conf
 port 800${port}
 # bind 172.20.1.10${port}
 bind 0.0.0.0
