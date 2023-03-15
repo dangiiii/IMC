@@ -1,0 +1,175 @@
+version: '3'
+services:
+ redis1:
+   container_name: redis1
+   hostname: redis1
+   image: "redis"
+   command: redis-server --requirepass testpw --latency-monitor-threshold 20 --include /usr/local/etc/redis/redis.conf --masterauth testpw
+   ports:
+   - "8001:8001"
+   - "20001:20001"
+   networks:
+     mubea:
+       ipv4_address: 172.20.1.101
+   environment:
+     CLI_PORT: "8001"
+   volumes:
+   - ./redis/redis1/data:/data
+   - ./redis/redis1/redis.conf:/usr/local/etc/redis/redis.conf
+
+ redis2:
+   container_name: redis2
+   hostname: redis2
+   image: "redis"
+   command: redis-server --requirepass testpw --latency-monitor-threshold 20 --include /usr/local/etc/redis/redis.conf --masterauth testpw
+   ports:
+   - "8002:8002"
+   - "20002:20002"
+   networks:
+     mubea:
+       ipv4_address: 172.20.1.102
+   environment:
+     CLI_PORT: "8002"
+   volumes:
+   - ./redis/redis2/data:/data
+   - ./redis/redis2/redis.conf:/usr/local/etc/redis/redis.conf
+
+ redis3:
+   container_name: redis3
+   hostname: redis3
+   image: "redis"
+   command: redis-server --requirepass testpw --latency-monitor-threshold 20 --include /usr/local/etc/redis/redis.conf --masterauth testpw
+   ports:
+   - "8003:8003"
+   - "20003:20003"
+   networks:
+     mubea:
+       ipv4_address: 172.20.1.103
+   environment:
+     CLI_PORT: "8003"
+   volumes:
+   - ./redis/redis3/data:/data
+   - ./redis/redis3/redis.conf:/usr/local/etc/redis/redis.conf
+
+ redis4:
+   container_name: redis4
+   hostname: redis4
+   image: "redis"
+   command: redis-server --requirepass testpw --latency-monitor-threshold 20 --include /usr/local/etc/redis/redis.conf --masterauth testpw
+   ports:
+   - "8004:8004"
+   - "20004:20004"
+   networks:
+     mubea:
+       ipv4_address: 172.20.1.104
+   environment:
+     CLI_PORT: "8004"
+   volumes:
+   - ./redis/redis4/data:/data
+   - ./redis/redis4/redis.conf:/usr/local/etc/redis/redis.conf
+
+ redis5:
+   container_name: redis5
+   hostname: redis5
+   image: "redis"
+   command: redis-server --requirepass testpw --latency-monitor-threshold 20 --include /usr/local/etc/redis/redis.conf --masterauth testpw
+   ports:
+   - "8005:8005"
+   - "20005:20005"
+   networks:
+     mubea:
+       ipv4_address: 172.20.1.105
+   environment:
+     CLI_PORT: "8005"
+   volumes:
+   - ./redis/redis5/data:/data
+   - ./redis/redis5/redis.conf:/usr/local/etc/redis/redis.conf
+
+ redis6:
+   container_name: redis6
+   hostname: redis6
+   image: "redis"
+   command: redis-server --requirepass testpw --latency-monitor-threshold 20 --include /usr/local/etc/redis/redis.conf --masterauth testpw
+   ports:
+   - "8006:8006"
+   - "20006:20006"
+   networks:
+     mubea:
+       ipv4_address: 172.20.1.106
+   environment:
+     CLI_PORT: "8006"
+   volumes:
+   - ./redis/redis6/data:/data
+   - ./redis/redis6/redis.conf:/usr/local/etc/redis/redis.conf
+
+ machine_python1:
+   build:
+     context: .
+     dockerfile: dockerfile_machine_python
+   container_name: machine_python1
+   hostname: machine_python1
+   environment:
+     REDIS_HOST: "172.20.1.10"
+     REDIS_PORT: "800"
+     REDIS_DB: "0"
+     REDIS_PASSWORD: "testpw"
+     NUM_REDIS_INSTANCES: "6"
+     LOCATION_ID: "0"
+     MACHINE_ID: "0"
+   ports:
+   - "7000:7000"
+   network_mode: "host"
+
+ machine_python2:
+   build:
+     context: .
+     dockerfile: dockerfile_machine_python
+   container_name: machine_python2
+   hostname: machine_python2
+   environment:
+     REDIS_HOST: "172.20.1.10"
+     REDIS_PORT: "800"
+     REDIS_DB: "0"
+     REDIS_PASSWORD: "testpw"
+     NUM_REDIS_INSTANCES: "6"
+     LOCATION_ID: "1"
+     MACHINE_ID: "1"
+   ports:
+   - "7001:7001"
+   network_mode: "host"
+
+ monitor_python:
+   build:
+     context: .
+     dockerfile: dockerfile_monitor_python
+   container_name: monitor_python
+   hostname: monitor_python
+   ports:
+   - "7002:7002"
+   environment:
+     REDIS_HOST: "172.20.1.10"
+     REDIS_PORT: "800"
+     REDIS_DB: "0"
+     REDIS_PASSWORD: "testpw"
+     NUM_REDIS_INSTANCES: "6"
+     LOCATION_ID: "1"
+     MACHINE_ID: "1"
+   network_mode: "host"
+
+ grafana:
+   container_name: grafana
+   hostname: grafana
+   image: "grafana/grafana"
+   ports:
+   - "3000:3000"
+   networks:
+     mubea:
+       ipv4_address: 172.20.1.5
+   environment:
+   - GF_INSTALL_PLUGINS=redis-datasource
+
+networks:
+ mubea:
+   ipam:
+     config:
+     - subnet: 172.20.1.0/24
